@@ -297,11 +297,11 @@ class _LoginPageState extends State<LoginPage> {
                                         fontSize: h * 0.014,
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const CreateAccountPage(),
+                                    GestureDetector( //pour rendre le texte cliquable
+                                      onTap: () => Navigator.push( // navigation vers la page de création de compte
+                                        context, // context nécessaire pour la navigation
+                                        MaterialPageRoute( // création d'une route vers la page de création de compte
+                                          builder: (_) => const CreateAccountPage(), // builder pour construire la page de destination
                                         ),
                                       ),
                                       child: Text(

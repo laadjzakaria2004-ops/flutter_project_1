@@ -3,7 +3,9 @@ import 'package:flutter_project_1/controllers/auth/create_account_controller.dar
 
 import 'login_page.dart';
 
-class CreateAccountPage extends StatefulWidget {
+import 'welcome/welcome_page.dart';
+
+class CreateAccountPage extends StatefulWidget { // StatefulWidget pour gérer les états du formulaire
   const CreateAccountPage({super.key});
 
   @override
@@ -54,7 +56,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       // Navigation vers login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const LoginPage()),
+        MaterialPageRoute(builder: (_) => const WelcomePage()),
       );
     }
   }
@@ -91,9 +93,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             flex: 11,
             child: Container(
               color: Colors.white,
+              
               padding: EdgeInsets.symmetric(
                 horizontal: w * 0.05,
                 vertical: h * 0.05,
+               
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -235,9 +239,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         ),
                         GestureDetector(
                           onTap: () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const LoginPage(),
+                            context, // navigation vers login
+                            MaterialPageRoute( // création d'une route vers la page de login
+                              builder: (_) => const LoginPage(), //loginPage() est nom de la classe de la page de login
                             ),
                           ),
                           child: Text(
