@@ -6,7 +6,7 @@ import '../../models/courses_study/courses_study_model.dart';
 class CourseStudyPage extends StatefulWidget {
   final String chapterTitle;
   final String chapterSubtitle;
-  final List<CoursePageContent> pages;
+  final List<section> pages;
 
   const CourseStudyPage({
     super.key,

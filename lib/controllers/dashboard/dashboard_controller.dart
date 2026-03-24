@@ -8,8 +8,10 @@ class DashboardController {
       role: "Student",
       chapters: [
         ChapterModel(
-          number: "Chapitre 01",
+          id: "Chapitre 01",
           title: "Basics",
+          chapterProgress: 100,
+          isFinished: false,
           icon: "assets/images/icons_algo1/basics_icone.png",
           lessons: [
             "Définition de l'algorithmique",
@@ -22,8 +24,10 @@ class DashboardController {
           ],
         ),
         ChapterModel(
-          number: "Chapitre 02",
+          id: "Chapitre 02",
           title: "Conditions",
+          chapterProgress: 120,
+          isFinished: false,
           icon: "assets/images/icons_algo1/si_sinon_icon.png",
           lessons: [
             "Introduction aux conditions",
@@ -33,8 +37,10 @@ class DashboardController {
           ],
         ),
         ChapterModel(
-          number: "Chapitre 03",
+          id: "Chapitre 03",
           title: "Loops",
+          chapterProgress: 150,
+          isFinished: false,
           icon: "assets/images/icons_algo1/loops_icone.png",
           lessons: [
             "Introduction aux boucles",
@@ -44,8 +50,10 @@ class DashboardController {
           ],
         ),
         ChapterModel(
-          number: "Chapitre 04",
+          id: "Chapitre 04",
           title: "Data Structures – Vectors and Matrices",
+          chapterProgress: 180,
+          isFinished: false,
           icon: "assets/images/icons_algo1/vectors_matris_icon.png",
           lessons: [
             "Introduction aux structures",
@@ -56,8 +64,10 @@ class DashboardController {
           ],
         ),
         ChapterModel(
-          number: "Chapitre 05",
+          id: "Chapitre 05",
           title: "Subprograms (Functions and Procedures)",
+          chapterProgress: 200,
+          isFinished: false,
           icon: "assets/images/icons_algo1/fonction_procedure_icone.png",
           lessons: [
             "Introduction aux sous-programmes",

@@ -366,11 +366,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     chapterTitle: chapter.title,
                     chapterSubtitle: "Introduction aux algorithmes",
                     pages: [
-                    CoursePageContent(   // ✅ instanciation correcte de l'objet
-    title: "Intro",
-    content: "...",
-  ),
-],
+                    section(  
+                      id: "1", // ✅ instanciation correcte de l'objet
+                      title: "Intro",
+                      content: "...",
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -421,7 +422,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               MainAxisAlignment.start, // ← pour aligner en haut
                           children: [
                             Text(
-                              chapter.number,
+                              chapter.id,
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontSize: h * 0.025,

@@ -1,12 +1,12 @@
-
-
-class CoursePageContent {
+class section {
+  final String id;
   final String title;
   final String content;
   final String? imagePath;
   final List<String>? bulletPoints;
 
-  const CoursePageContent({
+  const section({
+    required this.id,
     required this.title,
     required this.content,
     this.imagePath,
@@ -14,17 +14,4 @@ class CoursePageContent {
   });
 }
 
-class CourseStudyModel {
-  final String chapterTitle;
-  final String chapterSubtitle;
-  final List<CoursePageContent> pages;
 
-  int currentPage;
-
-  CourseStudyModel({
-    required this.chapterTitle,
-    required this.chapterSubtitle,
-    required this.pages,
-    this.currentPage = 0,
-  });
-}
