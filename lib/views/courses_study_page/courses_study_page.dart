@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui'; // Pour l'effet BackdropFilter (verre flou)
-import '../../models/Courses_study/Courses_study_model.dart';
+import '../../models/courses_study/courses_study_model.dart';
 
 
 class CourseStudyPage extends StatefulWidget {

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'dart:ui';
 import '../../controllers/dashboard/dashboard_controller.dart';
+import '../courses_study_page/courses_study_page.dart';
+import '../../models/courses_study/courses_study_model.dart';
+
 import '../auth/login_page.dart';
 import 'algo2_grid.dart';
-import '../courses_study_page/courses_study_page.dart';
-import '../../models/Courses_study/Courses_study_model.dart';
+import '../../controllers/dashboard/algo2_controller.dart';
+
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -15,6 +19,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final DashboardController _controller = DashboardController();
+  final Algo2Controller _algo2Controller = Algo2Controller();
   int _selectedIndex = 0;// 0 = Courses, 1 = Quiz, 2 = Leaderboard, 3 = Files
   int _selectedAlgo = 1; // 1 = Algo 1, 2 = Algo 2 (en construction)
 
@@ -74,11 +79,21 @@ class _DashboardPageState extends State<DashboardPage> {
                             SizedBox(height: h * 0.02),
                             _buildFilters(h),
                             SizedBox(height: h * 0.02),
-                            Expanded(
-                          child: _selectedAlgo == 1
-                 ? _buildChaptersGrid(h, w)  // ← Algo 1
-                    : Algo2Grid(h: h, w: w),    // ← Algo 2 fichier séparé
-                       ),
+                           
+                           Expanded(
+                               child: _selectedAlgo == 1
+                         ? _buildChaptersGrid(h, w)
+                           : Algo2Grid(
+                            h: h,
+                               w: w,
+                               onChapterSelected: (index) {
+                                setState(() {
+                                  _algo2Controller.selectChapter(index);
+                                });
+                                 },
+                               ),
+                              ),
+
                         _buildContinueButton(h, w),
                           ],
                         ),
@@ -337,9 +352,9 @@ class _DashboardPageState extends State<DashboardPage> {
         final isSelected = _controller.model.selectedChapterIndex == index;
 
         return GestureDetector(
-          
 
-            onDoubleTap: () 
+
+          onDoubleTap: () 
             {
               Navigator.push
               (
@@ -350,17 +365,17 @@ class _DashboardPageState extends State<DashboardPage> {
                   (
                     chapterTitle: chapter.title,
                     chapterSubtitle: "Introduction aux algorithmes",
-                    pages: 
-                    [
-                      CoursePageContent(
-                      title: "Intro",
-                      content: "Bienvenue dans ce chapitre...",
-                    ),
-                    ],
+                    pages: [
+                    CoursePageContent(   // ✅ instanciation correcte de l'objet
+    title: "Intro",
+    content: "...",
+  ),
+],
                   ),
                 ),
               );
-},
+            },
+
 
 
 
@@ -486,8 +501,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   // ── PANNEAU DROIT
   Widget _buildRightPanel(double h, double w) {
-    final lessons = _controller.getSelectedLessons();
-    final chapterTitle = _controller.getSelectedChapterTitle();
+    final lessons = _selectedAlgo == 1
+        ? _controller.getSelectedLessons() //pour faire le lien entre les deux algos et afficher les leçons du chapitre sélectionné
+        : _algo2Controller.getSelectedLessons(); //pour faire le lien entre les deux algos et afficher les leçons du chapitre sélectionné
+    final chapterTitle = _selectedAlgo == 1
+        ? _controller.getSelectedChapterTitle() //pour faire le lien entre les deux algos et afficher le titre du chapitre sélectionné
+        : _algo2Controller.getSelectedChapterTitle();
 
     return ClipRRect(
       child: BackdropFilter(
@@ -505,7 +524,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   // TODO: Navigation vers ProfilePage
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    MaterialPageRoute(builder: (_) => const LoginPage()), // ← temporaire
                   );
                 },
                 child: Container(
@@ -534,7 +553,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _controller.model.username,
+                              _controller.model.username, // controller de l'algo 1 
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
