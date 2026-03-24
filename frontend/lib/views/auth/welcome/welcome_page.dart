@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../login_page.dart';
+import '../../dashboard/dashboard_page.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -97,7 +98,7 @@ class _WelcomePageState extends State<WelcomePage> {
             color: const Color(0xFF1A1A2E),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: Colors.green.withOpacity(0.4),
+              color: Colors.green.withValues(alpha: 0.4),
               width: 1.5,
             ),
             boxShadow: [
@@ -174,7 +175,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (_) => const LoginPage()),
+                      MaterialPageRoute(builder: (_) => const DashboardPage()),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade700,

@@ -93,4 +93,11 @@ flutter:
     - assets/images/background1.jpg
     - assets/images/logo1_login.png
     - assets/images/image_create_account.png
+    - assets/images/icone_dash.png
+    - assets/images/icons_algo1/basics_icone.png
+    - assets/images/icons_algo1/fonction_procedure_icone.png
+    - assets/images/icons_algo1/loops_icone.png
+    - assets/images/icons_algo1/si_sinon_icon.png
+    - assets/images/icons_algo1/vectors_matris_icon.png
+
     

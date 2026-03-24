@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../controllers/auth/login_controller.dart';
 import 'create_account_page.dart';
 import 'dart:ui';
+import '../dashboard/dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,6 +42,10 @@ class _LoginPageState extends State<LoginPage> {
 
     if (error == null) {
       // Navigation vers la page suivante
+       Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (_) => const DashboardPage()),
+  );
     }
   }
 
