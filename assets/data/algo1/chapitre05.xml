@@ -3,10 +3,10 @@
 
   <section id="1" title="Introduction aux sous-programmes">
     <content>
-Les sous-programmes (ou sous-algorithmes) sont des blocs d’instructions indépendants, identifiés par un nom, qui peuvent être appelés depuis n’importe quel endroit d’un algorithme. Ils constituent la pierre angulaire de la modularité : ils permettent de décomposer un problème complexe en sous-problèmes plus simples, réutilisables et faciles à maintenir.
+Les sous-programmes (ou sous-algorithmes) sont des blocs d instructions indépendants, identifiés par un nom, qui peuvent être appelés depuis n importe quel endroit d un algorithme. Ils constituent la pierre angulaire de la modularité : ils permettent de décomposer un problème complexe en sous-problèmes plus simples, réutilisables et faciles à maintenir.
     </content>
     <bulletPoints>
-      <point>Évitent la duplication de code : une même séquence d’instructions peut être utilisée plusieurs fois sans être réécrite.</point>
+      <point>Évitent la duplication de code : une même séquence d instructions peut être utilisée plusieurs fois sans être réécrite.</point>
       <point>Améliorent la lisibilité : un algorithme bien structuré devient plus clair et plus facile à comprendre.</point>
       <point>Facilitent la maintenance : corriger un bug dans un sous-programme corrige tous ses appels.</point>
       <point>Deux types principaux : les fonctions (qui retournent une valeur) et les procédures (qui ne retournent rien).</point>
@@ -70,7 +70,7 @@ Procédure echanger(a, b par Référence)
   b ← temp
 FinProcédure.
       </point>
-      <point>Les procédures modifient souvent l’état du programme.</point>
+      <point>Les procédures modifient souvent l état du programme.</point>
     </bulletPoints>
   </section>
 
@@ -99,7 +99,7 @@ FinProcédure.
 
   <section id="5" title="Variables locales et globales">
     <content>
-La portée d’une variable définit où elle est accessible.
+La portée d une variable définit où elle est accessible.
     </content>
     <bulletPoints>
       <point>Variables locales : visibles uniquement dans le sous-programme.</point>
@@ -118,7 +118,7 @@ FinFonction.
 
   <section id="6" title="Récursivité">
     <content>
-Une fonction récursive s’appelle elle-même.
+Une fonction récursive s appelle elle-même.
     </content>
     <bulletPoints>
       <point>Doit avoir un cas de base.</point>

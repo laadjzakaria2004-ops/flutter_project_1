@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_project_1/views/profil/profil_page.dart';
+import '../leaderboard/leaderboard_page.dart';
 import 'dart:ui';
 import '../../controllers/dashboard/dashboard_controller.dart';
 import '../courses_study_page/courses_study_page.dart';
@@ -153,11 +154,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     MaterialPageRoute(builder: (_) => const LoginPage()),
                   );
                 } else if (entry.key == 2) {
-                  // Leaderboard
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => const LeaderboardPage()),
-                  // );
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (_) => const LeaderboardPage()),
+                   );
                 } else if (entry.key == 3) {
                   // Files
                   // Navigator.push(
@@ -365,7 +365,8 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (_) => CourseStudyPage(
         chapterTitle: chapter.title,
         chapterSubtitle: chapter.id,
-        xmlPath: chapter.xmlPath, // ← dynamique maintenant
+        xmlPath: chapter.xmlPath,
+        chapterIcon: chapter.icon, // ← dynamique maintenant
       ),
     ),
   );
@@ -518,7 +519,7 @@ onTap: () => setState(() => _controller.selectChapter(index)),
                   // TODO: Navigation vers ProfilePage
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()), // ← temporaire
+                    MaterialPageRoute(builder: (_) => const ProfilePage()), // ← temporaire
                   );
                 },
                 child: Container(
@@ -561,7 +562,7 @@ onTap: () => setState(() => _controller.selectChapter(index)),
                               _controller.model.role,
                               style: TextStyle(
 
-color: const Color.fromARGB(255, 223, 220, 220),
+                                color: const Color.fromARGB(255, 223, 220, 220),
                                 fontSize: h * 0.020,
                               ),
                             ),

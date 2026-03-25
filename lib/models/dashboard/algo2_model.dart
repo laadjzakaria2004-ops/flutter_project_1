@@ -3,12 +3,14 @@ class ChapterModel {
   final String title;
   final String icon;
   final List<String> lessons;
+  final String xmlPath; // ← ajouté
 
   ChapterModel({
     required this.number,
     required this.title,
     required this.icon,
     required this.lessons,
+    required this.xmlPath, // ← ajouté
   });
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../../controllers/dashboard/algo2_controller.dart';
+import '../../views/courses_study_page/courses_study_page.dart';
 
 class Algo2Grid extends StatefulWidget {
   final double h;
@@ -38,9 +39,22 @@ class _Algo2GridState extends State<Algo2Grid> {
         final isSelected = _controller.model.selectedChapterIndex == index;
 
         return GestureDetector(
+          onDoubleTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CourseStudyPage(
+                  chapterTitle: chapter.title,
+                  chapterSubtitle: chapter.number,
+                  xmlPath: chapter.xmlPath, // ← dynamique
+                  chapterIcon: chapter.icon,
+                ),
+              ),
+            );
+          },
           onTap: () {
             setState(() => _controller.selectChapter(index));
-            widget.onChapterSelected(index); // ← notifie le dashboard
+            widget.onChapterSelected(index);
           },
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
