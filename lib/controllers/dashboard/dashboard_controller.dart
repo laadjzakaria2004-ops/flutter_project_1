@@ -19,7 +19,12 @@ class DashboardController {
             "Définition de l'algorithmique",
             "Caractéristiques d'un algorithme",
             "Types d'algorithmes",
+            "Variables types et constantes",
+            "Opérateurs et expressions",
+            "Structures conditionnelles",
+            "Structures itératives (boucles)",
             "Représentation d'un algorithme",
+            "Bonnes pratiques en algorithmique",
           ],
         ),
         ChapterModel(
