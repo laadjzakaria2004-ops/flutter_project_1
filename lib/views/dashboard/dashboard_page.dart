@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'dart:ui';
@@ -113,7 +114,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ── SIDEBAR
+
+// ── SIDEBAR
   Widget _buildSidebar(double h, double w) {
     final items = [
       {"icon": Icons.menu_book, "label": "Courses"},
@@ -247,7 +249,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ── HEADER
+
+// ── HEADER
   Widget _buildHeader(double h, double w) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,16 +365,14 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (_) => CourseStudyPage(
         chapterTitle: chapter.title,
         chapterSubtitle: chapter.id,
-        xmlPath: "assets/data/algo1/chapitre01.xml" // ← chemin XML
+        xmlPath: chapter.xmlPath, // ← dynamique maintenant
       ),
     ),
   );
 },
 
 
-
-
-          onTap: () => setState(() => _controller.selectChapter(index)),
+onTap: () => setState(() => _controller.selectChapter(index)),
           child: ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(13), // ← coin haut gauche
@@ -462,7 +463,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ── BOUTON CONTINUER
+
+// ── BOUTON CONTINUER
   Widget _buildContinueButton(double h, double w) {
     return Padding(
       padding: EdgeInsets.only(top: h * 0.02),
@@ -558,7 +560,8 @@ class _DashboardPageState extends State<DashboardPage> {
                             Text(
                               _controller.model.role,
                               style: TextStyle(
-                                color: const Color.fromARGB(255, 223, 220, 220),
+
+color: const Color.fromARGB(255, 223, 220, 220),
                                 fontSize: h * 0.020,
                               ),
                             ),

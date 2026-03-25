@@ -1,4 +1,5 @@
 import '../../models/dashboard/dashboard_model.dart';
+
 class DashboardController {
   late DashboardModel model;
 
@@ -13,6 +14,7 @@ class DashboardController {
           chapterProgress: 100,
           isFinished: false,
           icon: "assets/images/icons_algo1/basics_icone.png",
+          xmlPath: "assets/data/algo1/chapitre01.xml", // ← ajouté
           lessons: [
             "Définition de l'algorithmique",
             "Caractéristiques d'un algorithme",
@@ -26,6 +28,7 @@ class DashboardController {
           chapterProgress: 120,
           isFinished: false,
           icon: "assets/images/icons_algo1/si_sinon_icon.png",
+          xmlPath: "assets/data/algo1/chapitre02.xml", // ← ajouté
           lessons: [
             "Introduction aux conditions",
             "If / Else",
@@ -39,6 +42,7 @@ class DashboardController {
           chapterProgress: 150,
           isFinished: false,
           icon: "assets/images/icons_algo1/loops_icone.png",
+          xmlPath: "assets/data/algo1/chapitre03.xml", // ← ajouté
           lessons: [
             "Introduction aux boucles",
             "Boucle For",
@@ -52,12 +56,12 @@ class DashboardController {
           chapterProgress: 180,
           isFinished: false,
           icon: "assets/images/icons_algo1/vectors_matris_icon.png",
+          xmlPath: "assets/data/algo1/chapitre04.xml", // ← ajouté
           lessons: [
             "Introduction aux structures",
             "Vecteurs",
             "Matrices",
             "Opérations sur les matrices",
-           
           ],
         ),
         ChapterModel(
@@ -66,6 +70,7 @@ class DashboardController {
           chapterProgress: 200,
           isFinished: false,
           icon: "assets/images/icons_algo1/fonction_procedure_icone.png",
+          xmlPath: "assets/data/algo1/chapitre05.xml", // ← ajouté
           lessons: [
             "Introduction aux sous-programmes",
             "Fonctions",
@@ -77,18 +82,15 @@ class DashboardController {
     );
   }
 
-  // Sélectionner un chapitre
   void selectChapter(int index) {
     model.selectedChapterIndex = index;
   }
 
-  // Récupérer les leçons du chapitre sélectionné
   List<String> getSelectedLessons() {
     if (model.selectedChapterIndex == null) return [];
     return model.chapters[model.selectedChapterIndex!].lessons;
   }
 
-  // Titre du chapitre sélectionné
   String getSelectedChapterTitle() {
     if (model.selectedChapterIndex == null) return '';
     return model.chapters[model.selectedChapterIndex!].title;
