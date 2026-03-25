@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../../models/courses_study/courses_study_model.dart';
 import '../../controllers/courses_study/courses_study_controller.dart';
+import '../dashboard/dashboard_page.dart';
 
 class CourseStudyPage extends StatefulWidget {
   final String chapterTitle;
   final String chapterSubtitle;
   final String xmlPath;
+  final String chapterIcon;
 
   const CourseStudyPage({
     super.key,
     required this.chapterTitle,
     required this.chapterSubtitle,
     required this.xmlPath,
+     required this.chapterIcon,
   });
 
   @override
@@ -123,93 +126,111 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
   }
 
   Widget _buildTopNavBar(double h, double w) {
-    return Container(
-      height: h * 0.08,
-      padding: EdgeInsets.symmetric(horizontal: w * 0.02),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.4),
-        border: Border(
-          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
-        ),
+  return Container(
+    height: h * 0.11, // ← agrandi
+    padding: EdgeInsets.symmetric(horizontal: w * 0.02),
+    decoration: BoxDecoration(
+      color: Colors.black.withValues(alpha: 0.4),
+      border: Border(
+        bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
       ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/icone_dash.png",
-            height: h * 0.12,
-            width: w * 0.12,
-            errorBuilder: (_, __, ___) => const Icon(
-              Icons.school,
-              color: Colors.blue,
-              size: 40,
-            ),
+    ),
+    child: Row(
+      children: [
+        Image.asset(
+          "assets/images/icone_dash.png",
+          height: h * 0.12, // ← ajuste ici
+          width: w * 0.12,  // ← ajuste ici
+          errorBuilder: (_, __, ___) => const Icon(
+            Icons.school,
+            color: Colors.blue,
+            size: 40,
           ),
-          SizedBox(width: w * 0.02),
-          Container(
-            width: 1,
-            height: h * 0.04,
-            color: Colors.white24,
+        ),
+        SizedBox(width: w * 0.02),
+        Container(
+          width: 1,
+          height: h * 0.05, // ← ajuste ici
+          color: Colors.white24,
+        ),
+        SizedBox(width: w * 0.02),
+        GestureDetector(
+          onTap: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const DashboardPage()),
           ),
-          SizedBox(width: w * 0.02),
-          _buildNavButton(Icons.home_outlined, "Home", h),
-          SizedBox(width: w * 0.02),
-          _buildNavButton(Icons.emoji_events_outlined, "Leaderboard", h),
-          SizedBox(width: w * 0.02),
-          _buildNavButton(Icons.folder_outlined, "Files", h),
-          const Spacer(),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: w * 0.015,
-              vertical: h * 0.008,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: Colors.white24),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: h * 0.025,
-                  backgroundColor: Colors.blue,
-                  child: Text(
-                    "H",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: h * 0.02,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Text(
-                  "Hamid_09",
+          child: _buildNavButton(Icons.home_outlined, "Home", h),
+        ),
+        SizedBox(width: w * 0.02),
+        GestureDetector(
+          onTap: () {
+            // TODO: Navigation vers LeaderboardPage
+          },
+          child: _buildNavButton(Icons.emoji_events_outlined, "Leaderboard", h),
+        ),
+        SizedBox(width: w * 0.02),
+        GestureDetector(
+          onTap: () {
+            // TODO: Navigation vers FilesPage
+          },
+          child: _buildNavButton(Icons.folder_outlined, "Files", h),
+        ),
+        const Spacer(),
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: w * 0.015,
+            vertical: h * 0.008,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: Colors.white24),
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: h * 0.030, // ← agrandi
+                backgroundColor: Colors.blue,
+                child: Text(
+                  "H",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: h * 0.018,
-                    fontWeight: FontWeight.w500,
+                    fontSize: h * 0.025, // ← agrandi
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(width: 8),
+              Text(
+                "Hamid_09",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: h * 0.020, // ← agrandi
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavButton(IconData icon, String label, double h) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.white70, size: h * 0.025),
-        SizedBox(width: 6),
-        Text(
-          label,
-          style: TextStyle(color: Colors.white70, fontSize: h * 0.017),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+ Widget _buildNavButton(IconData icon, String label, double h) {
+  return Row(
+    children: [
+      Icon(icon, color: Colors.white70, size: h * 0.035), // ← agrandi
+      SizedBox(width: 6),
+      Text(
+        label,
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: h * 0.020, // ← agrandi
+        ),
+      ),
+    ],
+  );
+}
 
   Widget _buildChapterHeader(double h, double w) {
     return Padding(
@@ -224,11 +245,16 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.blue.withValues(alpha: 0.4)),
             ),
-            child: Icon(
-              Icons.smart_toy_outlined,
-              color: Colors.blue,
-              size: h * 0.04,
-            ),
+            child: Image.asset(
+            widget.chapterIcon, // ← dynamique
+            width: h * 0.05,
+              height: h * 0.05,
+             errorBuilder: (_, __, ___) => Icon(
+                 Icons.smart_toy_outlined,
+             color: Colors.blue,
+             size: h * 0.04,
+              ),
+          ),
           ),
           SizedBox(width: w * 0.015),
           Column(
@@ -275,15 +301,15 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
             page.content,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.85),
-              fontSize: h * 0.020,
+              fontSize: h * 0.025,
               height: 1.6,
             ),
           ),
-          if (page.imagePath != null) ...[
+          if (page.imagePath != null) ...[ 
             SizedBox(height: h * 0.03),
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
+              child: Image.asset( 
                 page.imagePath!,
                 width: double.infinity,
                 fit: BoxFit.contain,
@@ -296,24 +322,13 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: h * 0.006),
-                        child: Container(
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
+                      
                       Expanded(
                         child: Text(
                           point,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.85),
-                            fontSize: h * 0.019,
+                            fontSize: h * 0.022,
                             height: 1.5,
                           ),
                         ),

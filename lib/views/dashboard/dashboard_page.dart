@@ -362,7 +362,8 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (_) => CourseStudyPage(
         chapterTitle: chapter.title,
         chapterSubtitle: chapter.id,
-        xmlPath: "assets/data/algo1/chapitre01.xml" // ← chemin XML
+        xmlPath: chapter.xmlPath, // ← dynamique maintenant
+        chapterIcon: chapter.icon,
       ),
     ),
   );

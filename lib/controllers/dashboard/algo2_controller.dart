@@ -12,6 +12,7 @@ class Algo2Controller {
           number: "Chapitre 01",
           title: "Data Structure",
           icon: "assets/images/icons_algo2/data_structure_icone.png",
+          xmlPath: "assets/data/algo1/chapitre04.xml", // ← ajouté
           lessons: [
             "Enregistrement de données",
             "Caractéristiques d'un algorithme",
@@ -26,6 +27,7 @@ class Algo2Controller {
           number: "Chapitre 02",
           title: "Files",
           icon: "assets/images/icons_algo2/files_icone.png",
+          xmlPath: "assets/data/algo1/chapitre05.xml", // ← ajouté
           lessons: [
             "Introduction aux files",
             "Pile et files",
@@ -37,6 +39,7 @@ class Algo2Controller {
           number: "Chapitre 03",
           title: "Linked List",
           icon: "assets/images/icons_algo2/listes_icones.png",
+          xmlPath: "assets/data/algo1/chapitre03.xml", // ← ajouté
           lessons: [
             "Introduction linked list",
             "Liste simple",
@@ -48,6 +51,7 @@ class Algo2Controller {
           number: "Chapitre 04",
           title: "Queues and Stacks",
           icon: "assets/images/icons_algo2/stacks_icone.png",
+          xmlPath: "assets/data/algo1/chapitre04.xml", // ← ajouté
           lessons: [
             "Introduction aux structures",
             "Vecteurs",

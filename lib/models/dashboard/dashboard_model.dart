@@ -5,6 +5,7 @@ class ChapterModel {
   final bool isFinished;
   final String icon;
   final List<String> lessons;
+  final String xmlPath; // ← ajouté
 
   ChapterModel({
     required this.id,
@@ -13,6 +14,7 @@ class ChapterModel {
     required this.isFinished,
     required this.icon,
     required this.lessons,
+    required this.xmlPath, // ← ajouté
   });
 }
 
