@@ -12,6 +12,7 @@ import '../auth/login_page.dart';
 import 'algo2_grid.dart';
 import '../../controllers/dashboard/algo2_controller.dart';
 import '../files/files_page.dart';
+import '../quiz/quiz_selection_page.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -152,7 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   // Quiz
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    MaterialPageRoute(builder: (_) => const QuizSelectionPage() ),
                   );
                 } else if (entry.key == 2) {
                    Navigator.push(
