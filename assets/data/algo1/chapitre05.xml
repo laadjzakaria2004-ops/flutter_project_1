@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="Chapitre 05" title="Subprograms (Functions and Procedures)">
+
+  <section id="1" title="Introduction aux sous-programmes">
+    <content>Les sous-programmes sont des blocs d'instructions réutilisables qui permettent de structurer un algorithme et éviter la répétition du code.</content>
+    <bulletPoints>
+      <point>Permet de réutiliser le code</point>
+      <point>Rend le programme plus lisible</point>
+      <point>Facilite la maintenance</point>
+      <point>Deux types : fonctions et procédures</point>
+    </bulletPoints>
+  </section>
+
+  <section id="2" title="Fonctions">
+    <content>Une fonction est un sous-programme qui prend des paramètres et retourne un résultat.</content>
+    <bulletPoints>
+      <point>Retourne une valeur</point>
+      <point>Peut prendre des paramètres</point>
+      <point>Utilisée pour effectuer un calcul</point>
+      <point>Exemple :</point>
+      <point>fonction somme(a, b)</point>
+      <point>retourner a + b</point>
+      <point>appel : somme(3,4) donne 7</point>
+    </bulletPoints>
+  </section>
+
+  <section id="3" title="Procédures">
+    <content>Une procédure est un sous-programme qui exécute des instructions sans retourner de valeur.</content>
+    <bulletPoints>
+      <point>Ne retourne pas de résultat</point>
+      <point>Peut modifier des variables</point>
+      <point>Utilisée pour afficher ou exécuter une action</point>
+      <point>Exemple :</point>
+      <point>procédure afficherNom(nom)</point>
+      <point>afficher "Bonjour " + nom</point>
+      <point>appel : afficherNom("Ali")</point>
+    </bulletPoints>
+  </section>
+
+  <section id="4" title="Récursivité">
+    <content>La récursivité est une technique où une fonction s'appelle elle-même pour résoudre un problème plus petit.</content>
+    <bulletPoints>
+      <point>Une fonction s'appelle elle-même</point>
+      <point>Doit avoir une condition d'arrêt</point>
+      <point>Permet de simplifier certains problèmes</point>
+      <point>Exemple : factorielle</point>
+      <point>fonction fact(n)</point>
+      <point>si n == 0 retourner 1</point>
+      <point>sinon retourner n * fact(n-1)</point>
+      <point>fact(5) donne 120</point>
+    </bulletPoints>
+  </section>
+
+</chapter>

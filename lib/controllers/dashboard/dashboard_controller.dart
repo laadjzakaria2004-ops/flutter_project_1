@@ -18,9 +18,6 @@ class DashboardController {
             "Caractéristiques d'un algorithme",
             "Types d'algorithmes",
             "Représentation d'un algorithme",
-            "jakadkallsllsl",
-            "jzjjzjjjssjs",
-            "paoksjs,ss",
           ],
         ),
         ChapterModel(

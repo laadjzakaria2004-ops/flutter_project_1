@@ -4,7 +4,8 @@ import 'dart:ui';
 import '../../controllers/dashboard/dashboard_controller.dart';
 import '../courses_study_page/courses_study_page.dart';
 import '../../models/courses_study/courses_study_model.dart';
-
+import '../../controllers/courses_study/courses_study_controller.dart';
+import '../../service/serviceXML.dart';
 import '../auth/login_page.dart';
 import 'algo2_grid.dart';
 import '../../controllers/dashboard/algo2_controller.dart';
@@ -354,28 +355,18 @@ class _DashboardPageState extends State<DashboardPage> {
         return GestureDetector(
 
 
-          onDoubleTap: () 
-            {
-              Navigator.push
-              (
-                context,
-                MaterialPageRoute
-                (
-                  builder: (_) => CourseStudyPage
-                  (
-                    chapterTitle: chapter.title,
-                    chapterSubtitle: "Introduction aux algorithmes",
-                    pages: [
-                    section(  
-                      id: "1", // ✅ instanciation correcte de l'objet
-                      title: "Intro",
-                      content: "...",
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+          onDoubleTap: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => CourseStudyPage(
+        chapterTitle: chapter.title,
+        chapterSubtitle: chapter.id,
+        xmlPath: "assets/data/algo1/chapitre01.xml" // ← chemin XML
+      ),
+    ),
+  );
+},
 
 
 

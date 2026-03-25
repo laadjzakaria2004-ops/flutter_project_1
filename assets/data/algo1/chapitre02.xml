@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="Chapitre 02" title="Conditions">
+
+  <section id="1" title="Introduction aux conditions">
+    <content>Les conditions permettent à un algorithme de prendre des décisions en fonction d'une situation donnée.</content>
+    <bulletPoints>
+      <point>Permet de changer le comportement du programme</point>
+      <point>Basé sur une condition (vrai ou faux)</point>
+      <point>Utilisé pour contrôler le flux d'exécution</point>
+      <point>Exemple : si il pleut alors prendre un parapluie</point>
+    </bulletPoints>
+  </section>
+
+  <section id="2" title="If / Else">
+    <content>La structure If / Else permet d'exécuter une action si une condition est vraie, sinon une autre action.</content>
+    <bulletPoints>
+      <point>Si la condition est vraie → exécuter le bloc IF</point>
+      <point>Sinon → exécuter le bloc ELSE</point>
+      <point>Permet de gérer deux cas différents</point>
+      <point>Exemple : vérifier si un nombre est positif</point>
+      <point>if x &gt; 0 alors afficher "positif" sinon afficher "négatif"</point>
+    </bulletPoints>
+  </section>
+
+  <section id="3" title="Switch Case">
+    <content>Le Switch Case est utilisé lorsqu'il y a plusieurs choix possibles pour une même variable.</content>
+    <bulletPoints>
+      <point>Permet de remplacer plusieurs if/else</point>
+      <point>Plus lisible quand il y a plusieurs cas</point>
+      <point>Chaque cas correspond à une valeur</point>
+      <point>Un cas par défaut est souvent utilisé</point>
+      <point>Exemple : afficher le jour de la semaine selon un numéro</point>
+    </bulletPoints>
+  </section>
+
+  <section id="4" title="Conditions imbriquées">
+    <content>Les conditions imbriquées sont des conditions placées à l'intérieur d'autres conditions pour gérer des cas plus complexes.</content>
+    <bulletPoints>
+      <point>Permet de tester plusieurs conditions successivement</point>
+      <point>Utilisé pour des décisions complexes</point>
+      <point>Peut rendre le code difficile à lire si trop utilisé</point>
+      <point>Exemple : vérifier une note</point>
+      <point>si note &gt;= 50 alors si note &gt;= 80 afficher "Excellent" sinon afficher "Passable"</point>
+    </bulletPoints>
+  </section>
+
+</chapter>

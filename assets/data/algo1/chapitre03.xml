@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="Chapitre 03" title="Loops">
+
+  <section id="1" title="Introduction aux boucles">
+    <content>Les boucles permettent de répéter plusieurs fois un bloc d'instructions sans écrire le même code plusieurs fois.</content>
+    <bulletPoints>
+      <point>Permet de répéter des actions automatiquement</point>
+      <point>Évite la duplication du code</point>
+      <point>Fonctionne avec une condition ou un nombre d'itérations</point>
+      <point>Exemple : afficher les nombres de 1 à 5</point>
+    </bulletPoints>
+  </section>
+
+  <section id="2" title="Boucle For">
+    <content>La boucle For est utilisée lorsque le nombre de répétitions est connu à l'avance.</content>
+    <bulletPoints>
+      <point>Utilisée avec un compteur</point>
+      <point>Nombre d'itérations défini</point>
+      <point>Très utilisée pour parcourir des tableaux</point>
+      <point>Exemple :</point>
+      <point>for i = 1 à 5 afficher i</point>
+      <point>Résultat : 1 2 3 4 5</point>
+    </bulletPoints>
+  </section>
+
+  <section id="3" title="Boucle While">
+    <content>La boucle While exécute un bloc tant que la condition est vraie.</content>
+    <bulletPoints>
+      <point>La condition est testée avant chaque exécution</point>
+      <point>Peut ne jamais s'exécuter si la condition est fausse</point>
+      <point>Attention aux boucles infinies</point>
+      <point>Exemple :</point>
+      <point>i = 1</point>
+      <point>tant que i &lt;= 5 afficher i puis i = i + 1</point>
+    </bulletPoints>
+  </section>
+
+  <section id="4" title="Boucle Do While">
+    <content>La boucle Do While exécute d'abord les instructions puis vérifie la condition.</content>
+    <bulletPoints>
+      <point>S'exécute au moins une fois</point>
+      <point>Condition testée après exécution</point>
+      <point>Utile quand on veut exécuter au moins une fois</point>
+      <point>Exemple :</point>
+      <point>i = 1</point>
+      <point>faire afficher i puis i = i + 1 tant que i &lt;= 5</point>
+    </bulletPoints>
+  </section>
+
+</chapter>

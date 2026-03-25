@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="Chapitre 01" title="Basics">
+
+  <section id="1" title="Définition de l'algorithmique">
+    <content>Un algorithme est une suite d'instructions précises permettant de résoudre un problème.</content>
+    <bulletPoints>
+      <point>Suite d'instructions ordonnées</point>
+      <point>Résout un problème précis</point>
+      <point>Peut être représenté en pseudo-code</point>
+      <point>Doit être exécuté étape par étape</point>
+    </bulletPoints>
+  </section>
+
+  <section id="2" title="Caractéristiques d'un algorithme">
+    <content>Un algorithme doit respecter plusieurs caractéristiques essentielles pour être correct et utilisable.</content>
+    <bulletPoints>
+      <point>Finitude : doit se terminer après un nombre fini d'étapes</point>
+      <point>Précision : chaque étape doit être claire et non ambiguë</point>
+      <point>Entrées : peut recevoir des données</point>
+      <point>Sorties : produit au moins un résultat</point>
+      <point>Efficacité : utilise peu de ressources</point>
+      <point>Généralité : fonctionne pour plusieurs cas</point>
+    </bulletPoints>
+    <imagePath>assets/images/algo_characteristics.png</imagePath>
+  </section>
+
+  <section id="3" title="Types d'algorithmes">
+    <content>Les algorithmes peuvent être classés selon leur comportement et leur structure.</content>
+    <bulletPoints>
+      <point>Séquentiel : instructions exécutées dans l'ordre</point>
+      <point>Conditionnel : utilise des conditions (if, else)</point>
+      <point>Itératif : utilise des boucles</point>
+      <point>Récursif : une fonction s'appelle elle-même</point>
+      <point>Exemple : calcul de factorielle avec récursivité</point>
+    </bulletPoints>
+  </section>
+
+  <section id="4" title="Représentation d'un algorithme">
+    <content>Un algorithme peut être représenté de plusieurs façons pour faciliter sa compréhension et son implémentation.</content>
+    <bulletPoints>
+      <point>Langage naturel : description simple</point>
+      <point>Pseudo-code : proche du langage de programmation</point>
+      <point>Organigramme (flowchart) : représentation graphique</point>
+      <point>Code : implémentation dans un langage comme Java ou Dart</point>
+      <point>Exemple : lire deux nombres puis afficher leur somme</point>
+    </bulletPoints>
+  </section>
+
+</chapter>

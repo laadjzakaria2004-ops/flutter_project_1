@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'dart:ui'; // Pour l'effet BackdropFilter (verre flou)
+import 'dart:ui';
 import '../../models/courses_study/courses_study_model.dart';
-
+import '../../controllers/courses_study/courses_study_controller.dart';
 
 class CourseStudyPage extends StatefulWidget {
   final String chapterTitle;
   final String chapterSubtitle;
-  final List<section> pages;
+  final String xmlPath;
 
   const CourseStudyPage({
     super.key,
     required this.chapterTitle,
     required this.chapterSubtitle,
-    required this.pages,
+    required this.xmlPath,
   });
 
   @override
@@ -20,24 +20,40 @@ class CourseStudyPage extends StatefulWidget {
 }
 
 class _CourseStudyPageState extends State<CourseStudyPage> {
-  int _currentPage = 0;
+  final CourseStudyController _controller = CourseStudyController();
+  bool _isLoading = true;
 
-  void _nextPage() {
-    if (_currentPage < widget.pages.length - 1) {
-      setState(() => _currentPage++);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _loadSections();
   }
 
-  void _prevPage() {
-    if (_currentPage > 0) {
-      setState(() => _currentPage--);
-    }
+  Future<void> _loadSections() async {
+    await _controller.loadFromXml(
+      xmlPath: widget.xmlPath,
+      chapterTitle: widget.chapterTitle,
+      chapterSubtitle: widget.chapterSubtitle,
+    );
+    setState(() => _isLoading = false);
   }
+
+  void _nextPage() => setState(() => _controller.nextPage());
+  void _prevPage() => setState(() => _controller.prevPage());
 
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF0D0D2B),
+        body: Center(child: CircularProgressIndicator(color: Colors.blue)),
+      );
+    }
+
+    final page = _controller.currentSection!;
 
     return Scaffold(
       body: Stack(
@@ -89,7 +105,7 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
                             ),
                             SizedBox(height: h * 0.02),
                             Expanded(
-                              child: _buildPageContent(h, w),
+                              child: _buildPageContent(h, w, page),
                             ),
                           ],
                         ),
@@ -240,81 +256,80 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
     );
   }
 
- Widget _buildPageContent(double h, double w) {
-  final page = widget.pages[_currentPage];
-  return SingleChildScrollView(
-    padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.01),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          page.title, // ← ici on utilise la propriété de l'objet
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: h * 0.038,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: h * 0.025),
-        Text(
-          page.content, // ← idem
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.85),
-            fontSize: h * 0.020,
-            height: 1.6,
-          ),
-        ),
-        if (page.imagePath != null) ...[
-          SizedBox(height: h * 0.03),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              page.imagePath!,
-              width: double.infinity,
-              fit: BoxFit.contain,
+  Widget _buildPageContent(double h, double w, section page) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.01),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            page.title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: h * 0.038,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: h * 0.025),
+          Text(
+            page.content,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.85),
+              fontSize: h * 0.020,
+              height: 1.6,
+            ),
+          ),
+          if (page.imagePath != null) ...[
+            SizedBox(height: h * 0.03),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                page.imagePath!,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+          if (page.bulletPoints != null && page.bulletPoints!.isNotEmpty)
+            ...page.bulletPoints!.map<Widget>((point) => Padding(
+                  padding: EdgeInsets.only(bottom: h * 0.012),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: h * 0.006),
+                        child: Container(
+                          width: 6,
+                          height: 6,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          point,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.85),
+                            fontSize: h * 0.019,
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          SizedBox(height: h * 0.04),
         ],
-        if (page.bulletPoints != null && page.bulletPoints!.isNotEmpty)
-          ...page.bulletPoints!.map<Widget>((point) => Padding(
-                padding: EdgeInsets.only(bottom: h * 0.012),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: h * 0.006),
-                      child: Container(
-                        width: 6,
-                        height: 6,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        point,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.85),
-                          fontSize: h * 0.019,
-                          height: 1.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        SizedBox(height: h * 0.04),
-      ],
-    ),
-  );
-}
+      ),
+    );
+  }
 
   Widget _buildBottomNavBar(double h, double w) {
-    final isFirstPage = _currentPage == 0;
-    final isLastPage = _currentPage == widget.pages.length - 1;
+    final isFirstPage = _controller.isFirstPage;
+    final isLastPage = _controller.isLastPage;
 
     return Container(
       height: h * 0.08,
@@ -330,53 +345,82 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
           GestureDetector(
             onTap: isFirstPage ? null : _prevPage,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.015, vertical: h * 0.015),
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.015,
+                vertical: h * 0.015,
+              ),
               decoration: BoxDecoration(
                 color: isFirstPage
                     ? Colors.white.withValues(alpha: 0.05)
                     : Colors.white.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: isFirstPage ? Colors.white12 : Colors.white30),
+                border: Border.all(
+                  color: isFirstPage ? Colors.white12 : Colors.white30,
+                ),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.chevron_left, color: isFirstPage ? Colors.white24 : Colors.white, size: h * 0.03),
+                  Icon(
+                    Icons.chevron_left,
+                    color: isFirstPage ? Colors.white24 : Colors.white,
+                    size: h * 0.03,
+                  ),
                   SizedBox(width: 4),
-                  Icon(Icons.menu, color: isFirstPage ? Colors.white24 : Colors.white, size: h * 0.025),
+                  Icon(
+                    Icons.menu,
+                    color: isFirstPage ? Colors.white24 : Colors.white,
+                    size: h * 0.025,
+                  ),
                 ],
               ),
             ),
           ),
           const Spacer(),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.025, vertical: h * 0.012),
+            padding: EdgeInsets.symmetric(
+              horizontal: w * 0.025,
+              vertical: h * 0.012,
+            ),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: Colors.white24),
             ),
             child: Text(
-              "${_currentPage + 1}/${widget.pages.length}",
-              style: TextStyle(color: Colors.white, fontSize: h * 0.020, fontWeight: FontWeight.w500),
+              "${_controller.model!.currentPage + 1}/${_controller.totalPages}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: h * 0.020,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           const Spacer(),
           GestureDetector(
             onTap: isLastPage ? null : _nextPage,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.025, vertical: h * 0.015),
-              decoration: BoxDecoration(
-                color: isLastPage ? Colors.blue.withValues(alpha: 0.2) : Colors.blue,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: isLastPage ? Colors.blue.withValues(alpha: 0.3) : Colors.blue),
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.025,
+                vertical: h * 0.015,
               ),
-              child: Row(
-                children: [
-                  Text(
-                    isLastPage ? "Terminé ✓" : "→ Suivant",
-                    style: TextStyle(color: Colors.white, fontSize: h * 0.020, fontWeight: FontWeight.bold),
-                  ),
-                ],
+              decoration: BoxDecoration(
+                color: isLastPage
+                    ? Colors.blue.withValues(alpha: 0.2)
+                    : Colors.blue,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: isLastPage
+                      ? Colors.blue.withValues(alpha: 0.3)
+                      : Colors.blue,
+                ),
+              ),
+              child: Text(
+                isLastPage ? "Terminé ✓" : "→ Suivant",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: h * 0.020,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

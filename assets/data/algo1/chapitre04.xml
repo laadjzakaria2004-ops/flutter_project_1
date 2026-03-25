@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="Chapitre 04" title="Data Structures – Vectors and Matrices">
+
+  <section id="1" title="Introduction aux structures">
+    <content>Les structures de données permettent d'organiser et de stocker les données de manière efficace pour les utiliser dans les algorithmes.</content>
+    <bulletPoints>
+      <point>Permet de stocker plusieurs valeurs</point>
+      <point>Facilite le traitement des données</point>
+      <point>Exemples : tableaux, vecteurs, matrices</point>
+      <point>Très utilisées en programmation</point>
+    </bulletPoints>
+  </section>
+
+  <section id="2" title="Vecteurs">
+    <content>Un vecteur (tableau) est une collection d'éléments de même type stockés dans des cases mémoire consécutives.</content>
+    <bulletPoints>
+      <point>Les éléments sont accessibles par un indice</point>
+      <point>L'indice commence généralement à 0</point>
+      <point>Permet de stocker plusieurs valeurs dans une seule variable</point>
+      <point>Exemple :</point>
+      <point>tab = [2, 4, 6, 8]</point>
+      <point>tab[2] donne 6</point>
+    </bulletPoints>
+  </section>
+
+  <section id="3" title="Matrices">
+    <content>Une matrice est un tableau à deux dimensions composé de lignes et de colonnes.</content>
+    <bulletPoints>
+      <point>Accès avec deux indices : ligne et colonne</point>
+      <point>Utilisée pour représenter des tableaux de données</point>
+      <point>Très utilisée en mathématiques et en informatique</point>
+      <point>Exemple :</point>
+      <point>mat = [[1,2],[3,4]]</point>
+      <point>mat[1][0] donne 3</point>
+    </bulletPoints>
+  </section>
+
+  <section id="4" title="Opérations sur les matrices">
+    <content>Les matrices permettent plusieurs opérations importantes utilisées en algorithmique.</content>
+    <bulletPoints>
+      <point>Addition de matrices</point>
+      <point>Multiplication de matrices</point>
+      <point>Transposée</point>
+      <point>Calcul du déterminant</point>
+      <point>Exemple : addition</point>
+      <point>A = [[1,2],[3,4]]</point>
+      <point>B = [[5,6],[7,8]]</point>
+      <point>C = [[6,8],[10,12]]</point>
+    </bulletPoints>
+  </section>
+
+</chapter>
