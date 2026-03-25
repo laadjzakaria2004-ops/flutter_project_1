@@ -9,6 +9,7 @@ import '../../service/serviceXML.dart';
 import '../auth/login_page.dart';
 import 'algo2_grid.dart';
 import '../../controllers/dashboard/algo2_controller.dart';
+import '../files/files_page.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -158,10 +159,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   // );
                 } else if (entry.key == 3) {
                   // Files
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => const FilesPage()),
-                  // );
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (_) => const FilesPage()),
+                   );
                 }
               },
               child: _buildSidebarItem(
