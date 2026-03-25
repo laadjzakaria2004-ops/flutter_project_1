@@ -9,8 +9,14 @@ class WelcomePage extends StatefulWidget {
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
-  // Textes à afficher un par un style terminal
+class _WelcomePageState extends State<WelcomePage>
+    with SingleTickerProviderStateMixin {
+
+  // ───────── ANIMATION PNG
+  late AnimationController _controller;
+  late Animation<double> _floatAnimation;
+
+  // Textes terminal
   final List<String> _lines = [
     '> Initializing LetsAllgo...',
     '> Loading modules...',
@@ -34,6 +40,17 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
+
+    // ───────── INIT ANIMATION
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+
+    _floatAnimation = Tween<double>(begin: -10, end: 10).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
     _startTyping();
   }
 
@@ -44,7 +61,6 @@ class _WelcomePageState extends State<WelcomePage> {
         return;
       }
 
-      // Toutes les lignes sont affichées
       if (_currentLine >= _lines.length) {
         timer.cancel();
         setState(() => _showButton = true);
@@ -53,7 +69,6 @@ class _WelcomePageState extends State<WelcomePage> {
 
       final line = _lines[_currentLine];
 
-      // Ligne vide — passe directement à la suivante
       if (line.isEmpty) {
         setState(() {
           _displayedLines.add('');
@@ -64,14 +79,12 @@ class _WelcomePageState extends State<WelcomePage> {
         return;
       }
 
-      // Affiche caractère par caractère
       if (_currentChar < line.length) {
         setState(() {
           _currentText = line.substring(0, _currentChar + 1);
           _currentChar++;
         });
       } else {
-        // Ligne terminée — passe à la suivante
         setState(() {
           _displayedLines.add(_currentText);
           _currentLine++;
@@ -83,124 +96,152 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D1A), // fond sombre style terminal
-      body: Center(
-        child: Container(
-          width: w * 0.50,
-          padding: EdgeInsets.all(h * 0.05),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1A1A2E),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Colors.green.withValues(alpha: 0.4),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.green.withOpacity(0.1),
-                blurRadius: 30,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      backgroundColor: const Color(0xFF0D0D1A),
+      body: Stack(
+        children: [
 
-              // Barre style terminal
-              Row(
-                children: [
-                  _dot(Colors.red),
-                  SizedBox(width: w * 0.008),
-                  _dot(Colors.orange),
-                  SizedBox(width: w * 0.008),
-                  _dot(Colors.green),
-                  SizedBox(width: w * 0.02),
-                  Text(
-                    "letsallgo -- terminal",
-                    style: TextStyle(
-                      color: Colors.white38,
-                      fontSize: h * 0.014,
-                    ),
+          /// 🔥 IMAGE PNG ANIMÉE (BACKGROUND)
+          AnimatedBuilder(
+            animation: _floatAnimation,
+            builder: (context, child) {
+              return Positioned(
+                top: h * 0.25 + _floatAnimation.value,
+                left: w * 0.07,
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Image.asset(
+                    "assets/images/masscott01.png", // 👈 MET TON PNG ICI
+                    width: 250,
+                  ),
+                ),
+              );
+            },
+          ),
+
+          /// 🔥 CONTENU PRINCIPAL
+          Center(
+            child: Container(
+              width: w * 0.50,
+              padding: EdgeInsets.all(h * 0.05),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1A2E),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.green.withValues(alpha: 0.4),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.green.withOpacity(0.1),
+                    blurRadius: 30,
                   ),
                 ],
               ),
-              SizedBox(height: h * 0.03),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-              // Lignes déjà affichées
-              ...(_displayedLines.map((line) => Padding(
-                    padding: EdgeInsets.only(bottom: h * 0.008),
-                    child: Text(
-                      line,
-                      style: TextStyle(
-                        color: _getColor(line),
-                        fontSize: h * 0.02,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.w500,
+                  // ── BARRE TERMINAL
+                  Row(
+                    children: [
+                      _dot(Colors.red),
+                      SizedBox(width: w * 0.008),
+                      _dot(Colors.orange),
+                      SizedBox(width: w * 0.008),
+                      _dot(Colors.green),
+                      SizedBox(width: w * 0.02),
+                      Text(
+                        "letsallgo -- terminal",
+                        style: TextStyle(
+                          color: Colors.white38,
+                          fontSize: h * 0.014,
+                        ),
                       ),
-                    ),
-                  ))),
-
-              // Ligne en cours d'écriture
-              if (_currentText.isNotEmpty)
-                Row(
-                  children: [
-                    Text(
-                      _currentText,
-                      style: TextStyle(
-                        color: _getColor(_currentText),
-                        fontSize: h * 0.02,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    // Curseur clignotant
-                    _BlinkingCursor(height: h),
-                  ],
-                ),
-
-              SizedBox(height: h * 0.04),
-
-              // Bouton Get Started
-              if (_showButton)
-                SizedBox(
-                  width: double.infinity,
-                  height: h * 0.06,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => const DashboardPage()),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade700,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      "> Get Started",
-                      style: TextStyle(
-                        fontSize: h * 0.02,
-                        color: Colors.white,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    ],
                   ),
-                ),
-            ],
+                  SizedBox(height: h * 0.03),
+
+                  // ── TEXTES
+                  ...(_displayedLines.map((line) => Padding(
+                        padding: EdgeInsets.only(bottom: h * 0.008),
+                        child: Text(
+                          line,
+                          style: TextStyle(
+                            color: _getColor(line),
+                            fontSize: h * 0.02,
+                            fontFamily: 'monospace',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ))),
+
+                  if (_currentText.isNotEmpty)
+                    Row(
+                      children: [
+                        Text(
+                          _currentText,
+                          style: TextStyle(
+                            color: _getColor(_currentText),
+                            fontSize: h * 0.02,
+                            fontFamily: 'monospace',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        _BlinkingCursor(height: h),
+                      ],
+                    ),
+
+                  SizedBox(height: h * 0.04),
+
+                  // ── BUTTON
+                  if (_showButton)
+                    SizedBox(
+                      width: double.infinity,
+                      height: h * 0.06,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const DashboardPage()),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green.shade700,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          "> Get Started",
+                          style: TextStyle(
+                            fontSize: h * 0.02,
+                            color: Colors.white,
+                            fontFamily: 'monospace',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  // Couleur selon le contenu de la ligne
   Color _getColor(String line) {
     if (line.startsWith('>')) return Colors.greenAccent;
     if (line.contains('Welcome')) return Colors.cyanAccent;
@@ -208,7 +249,6 @@ class _WelcomePageState extends State<WelcomePage> {
     return Colors.white70;
   }
 
-  // Point coloré style terminal
   Widget _dot(Color color) {
     return Container(
       width: 12,
@@ -221,7 +261,7 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 }
 
-// Curseur clignotant
+// ───────── CURSEUR
 class _BlinkingCursor extends StatefulWidget {
   final double height;
   const _BlinkingCursor({required this.height});
