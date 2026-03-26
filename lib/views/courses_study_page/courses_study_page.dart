@@ -3,6 +3,8 @@ import 'dart:ui';
 import '../../models/courses_study/courses_study_model.dart';
 import '../../controllers/courses_study/courses_study_controller.dart';
 import '../dashboard/dashboard_page.dart';
+import '../../views/leaderboard/leaderboard_page.dart';
+import '../files/files_page.dart';
 
 class CourseStudyPage extends StatefulWidget {
   final String chapterTitle;
@@ -163,16 +165,18 @@ class _CourseStudyPageState extends State<CourseStudyPage> {
         ),
         SizedBox(width: w * 0.02),
         GestureDetector(
-          onTap: () {
-            // TODO: Navigation vers LeaderboardPage
-          },
+           onTap: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const LeaderboardPage()),
+          ),
           child: _buildNavButton(Icons.emoji_events_outlined, "Leaderboard", h),
         ),
         SizedBox(width: w * 0.02),
         GestureDetector(
-          onTap: () {
-            // TODO: Navigation vers FilesPage
-          },
+           onTap: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const FilesPage()),
+          ),
           child: _buildNavButton(Icons.folder_outlined, "Files", h),
         ),
         const Spacer(),

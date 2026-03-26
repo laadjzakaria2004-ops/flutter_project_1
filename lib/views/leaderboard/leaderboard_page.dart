@@ -11,6 +11,8 @@ import 'dart:ui';
 import '../../controllers/leaderboard/leaderboard_controller.dart';
 import '../../models/leaderboard/leaderboard_model.dart';
 import '../dashboard/dashboard_page.dart';
+import '../files/files_page.dart';
+import '../quiz/quiz_selection_page.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
@@ -107,10 +109,17 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 if (entry.key == 0) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const DashboardPage()));
+
+
                 } else if (entry.key == 1) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const LoginPage()));
+                      MaterialPageRoute(builder: (_) => const QuizSelectionPage()));
+                }else if (entry.key == 3) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const FilesPage()));
                 }
+
+
               },
               child: _buildSidebarItem(
                 icon: entry.value["icon"] as IconData,

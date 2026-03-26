@@ -8,6 +8,9 @@ import '../pdf_images_views/pdf_viewer_page.dart';
 import '../pdf_images_views/image_viewer_page.dart';
 import '../files/algo2_files_grid.dart';
 import '../../controllers/files/files_algo2_controller.dart';
+import '../quiz/quiz_selection_page.dart';
+import '../leaderboard/leaderboard_page.dart';
+
 
 class FilesPage extends StatefulWidget {
   const FilesPage({super.key});
@@ -145,17 +148,15 @@ class _FilesPageState extends State<FilesPage> {
                   // Quiz
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    MaterialPageRoute(builder: (_) => const QuizSelectionPage()),
                   );
                 } else if (entry.key == 2) {
-                  // Leaderboard
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => const LeaderboardPage()),
-                  // );
-                } else if (entry.key == 3) {
-                  // Files → déjà ici, rien à faire
-                }
+                 // Leaderboard
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (_) => const LeaderboardPage()),
+                   );
+                } 
               },
               child: _buildSidebarItem(
                 icon: entry.value["icon"] as IconData,

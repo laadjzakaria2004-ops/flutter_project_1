@@ -2,20 +2,19 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_project_1/controllers/quiz/quiz_controller.dart';
+import 'package:flutter_project_1/controllers/quiz/algo2_quiz_controller.dart';
 import 'package:flutter_project_1/views/quiz/quiz_page_content.dart';
+import 'package:flutter_project_1/views/quiz/widgets/quiz_chapters_grid.dart';
+import 'package:flutter_project_1/views/quiz/widgets/quiz_intensity_selector.dart';
 import '../dashboard/dashboard_page.dart';
 import '../auth/login_page.dart';
 import '../leaderboard/leaderboard_page.dart';
 import '../files/files_page.dart';
-import '../../views/quiz/algo2_quiz_selection_page.dart';
+
+// views/quiz/quiz_selection_page.dart
 
 class QuizSelectionPage extends StatefulWidget {
-  final bool isAlgo2;
-
-  const QuizSelectionPage({
-    super.key,
-    this.isAlgo2 = false, // valeur par défaut
-  });
+  const QuizSelectionPage({super.key});
 
   @override
   State<QuizSelectionPage> createState() => _QuizSelectionPageState();
@@ -28,15 +27,36 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
   int _selectedIntensity = 10;
   int _currentStep = 1;
 
-  // Liste des chapitres disponibles pour Algo 1
-  final List<Map<String, String>> _chapters = [
-  {"id": "Chapitre 01", "title": "Basics", "icon": "assets/images/icons_algo1/basics_icone.png"},
-  {"id": "Chapitre 02", "title": "Conditions", "icon": "assets/images/icons_algo1/si_sinon_icon.png"},
-  {"id": "Chapitre 03", "title": "Loops", "icon": "assets/images/icons_algo1/loops_icone.png"},
-  {"id": "Chapitre 04", "title": "Data Structures - Vectors and Matrices", "icon": "assets/images/icons_algo1/vectors_matris_icon.png"},
-  {"id": "Chapitre 05", "title": "Subprograms (Functions and Procedures)", "icon": "assets/images/icons_algo1/fonction_procedure_icone.png"},
+  final List<Map<String, String>> _chaptersAlgo1 = const [
+    {"id": "Chapitre 01", "title": "Basics", "icon": "assets/images/icons_algo1/basics_icone.png"},
+    {"id": "Chapitre 02", "title": "Conditions", "icon": "assets/images/icons_algo1/si_sinon_icon.png"},
+    {"id": "Chapitre 03", "title": "Loops", "icon": "assets/images/icons_algo1/loops_icone.png"},
+    {"id": "Chapitre 04", "title": "Data Structures - Vectors and Matrices", "icon": "assets/images/icons_algo1/vectors_matris_icon.png"},
+    {"id": "Chapitre 05", "title": "Subprograms (Functions and Procedures)", "icon": "assets/images/icons_algo1/fonction_procedure_icone.png"},
+  ];
 
-];
+  final List<Map<String, String>> _chaptersAlgo2 = const [
+    {"id": "Chapitre 01", "title": "Data Structure", "icon": "assets/images/icons_algo2/data_structure_icone.png"},
+    {"id": "Chapitre 02", "title": "Files", "icon": "assets/images/icons_algo2/files_icone.png"},
+    {"id": "Chapitre 03", "title": "Linked List", "icon": "assets/images/icons_algo2/listes_icones.png"},
+    {"id": "Chapitre 04", "title": "Queues and Stacks", "icon": "assets/images/icons_algo2/stacks_icone.png"},
+  ];
+
+  List<Map<String, String>> get _currentChapters =>
+      _selectedAlgo == 1 ? _chaptersAlgo1 : _chaptersAlgo2;
+
+  List<int> get _currentIntensities =>
+      _selectedAlgo == 1 ? [10, 15, 20, 30] : [5, 10, 15, 20];
+
+  List<String> get _currentIntensityLabels =>
+      _selectedAlgo == 1 ? ["Medium", "Hard", "Expert", "Master"] : ["Easy", "Medium", "Hard", "Expert"];
+
+  List<Color> get _currentIntensityColors =>
+      _selectedAlgo == 1
+          ? [Colors.orange, Colors.red, Colors.purple, Colors.deepPurple]
+          : [Colors.green, Colors.orange, Colors.red, Colors.purple];
+
+  int get _defaultIntensity => _selectedAlgo == 1 ? 10 : 5;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +66,7 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fond couleur sombre
           Container(color: const Color(0xFF0D0D2B)),
-          // Image de fond avec opacité
           Opacity(
             opacity: 0.90,
             child: Container(
@@ -60,7 +78,6 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
               ),
             ),
           ),
-          // Contenu principal
           Row(
             children: [
               _buildSidebar(h, w),
@@ -113,7 +130,6 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
     );
   }
 
-  // ========== SIDEBAR ==========
   Widget _buildSidebar(double h, double w) {
     final items = [
       {"icon": Icons.menu_book, "label": "Courses"},
@@ -132,11 +148,7 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
             "assets/images/icone_dash.png",
             width: h * 0.15,
             height: h * 0.15,
-            errorBuilder: (_, __, ___) => Icon(
-              Icons.school,
-              color: Colors.blue,
-              size: h * 0.08,
-            ),
+            errorBuilder: (_, __, ___) => Icon(Icons.school, color: Colors.blue, size: h * 0.08),
           ),
           SizedBox(height: h * 0.04),
           ...items.asMap().entries.map(
@@ -239,7 +251,6 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
     );
   }
 
-  // ========== HEADER ==========
   Widget _buildHeader(double h) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,37 +265,38 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
         ),
         SizedBox(height: h * 0.005),
         Text(
-          "Select chapters and quiz intensity to begin",
+          _selectedAlgo == 1
+              ? "Select chapters and quiz intensity to begin"
+              : "Advanced data structures — Select chapters and difficulty",
           style: TextStyle(fontSize: h * 0.016, color: Colors.white60),
         ),
       ],
     );
   }
 
-  // ========== FILTRES ALGO 1 / ALGO 2 ==========
   Widget _buildFilters(double h) {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => setState(() => _selectedAlgo = 1),
+          onTap: () => _switchAlgo(1),
           child: _filterChip("Algo 1", h, selected: _selectedAlgo == 1),
         ),
         SizedBox(width: 8),
         GestureDetector(
-          onTap: () {
-          // Naviguer vers Algo2QuizSelectionPage
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const Algo2QuizSelectionPage(),
-            ),
-          );
-        },
-
-          child: _filterChip("Algo 2 (En construction)", h, selected: _selectedAlgo == 2),
+          onTap: () => _switchAlgo(2),
+          child: _filterChip("Algo 2", h, selected: _selectedAlgo == 2),
         ),
       ],
     );
+  }
+
+  void _switchAlgo(int algo) {
+    setState(() {
+      _selectedAlgo = algo;
+      _selectedChapters.clear();
+      _selectedIntensity = _defaultIntensity;
+      _currentStep = 1;
+    });
   }
 
   Widget _filterChip(String label, double h, {bool selected = false}) {
@@ -306,97 +318,67 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
     );
   }
 
-  // ========== PROGRESS STEPS ==========
   Widget _buildProgressSteps(double h, double w) {
+    final steps = ["Chapters", "Intensity", "Review"];
     return Row(
-      children: [
-        _buildStep(
-          h,
-          stepNumber: 1,
-          label: "Chapters",
-          isActive: _currentStep == 1,
-          isCompleted: _currentStep > 1,
-        ),
-        Expanded(
-          child: Container(
-            height: 2,
-            color: _currentStep > 1 ? Colors.blue : Colors.white24,
-          ),
-        ),
-        _buildStep(
-          h,
-          stepNumber: 2,
-          label: "Intensity",
-          isActive: _currentStep == 2,
-          isCompleted: _currentStep > 2,
-        ),
-        Expanded(
-          child: Container(
-            height: 2,
-            color: _currentStep > 2 ? Colors.blue : Colors.white24,
-          ),
-        ),
-        _buildStep(
-          h,
-          stepNumber: 3,
-          label: "Review",
-          isActive: _currentStep == 3,
-          isCompleted: _currentStep > 3,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStep(double h, {
-    required int stepNumber,
-    required String label,
-    required bool isActive,
-    required bool isCompleted,
-  }) {
-    return Column(
-      children: [
-        Container(
-          width: h * 0.05,
-          height: h * 0.05,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isActive
-                ? Colors.blue
-                : isCompleted
-                    ? Colors.green
-                    : Colors.white24,
-            border: Border.all(
-              color: isActive ? Colors.blue : Colors.white24,
-              width: 2,
+      children: List.generate(steps.length * 2 - 1, (i) {
+        if (i.isOdd) {
+          return Expanded(
+            child: Container(
+              height: 2,
+              color: _currentStep > (i ~/ 2) + 1 ? Colors.blue : Colors.white24,
             ),
-          ),
-          child: Center(
-            child: isCompleted
-                ? Icon(Icons.check, color: Colors.white, size: h * 0.025)
-                : Text(
-                    stepNumber.toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: h * 0.022,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-          ),
-        ),
-        SizedBox(height: h * 0.008),
-        Text(
-          label,
-          style: TextStyle(
-            color: isActive || isCompleted ? Colors.blue : Colors.white54,
-            fontSize: h * 0.014,
-          ),
-        ),
-      ],
+          );
+        }
+        final stepIndex = i ~/ 2 + 1;
+        final isDone = _currentStep > stepIndex;
+        final isActive = _currentStep == stepIndex;
+        return Column(
+          children: [
+            Container(
+              width: h * 0.05,
+              height: h * 0.05,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isDone
+                    ? Colors.green
+                    : (isActive ? Colors.blue : Colors.white24),
+                border: Border.all(
+                  color: isActive ? Colors.blue : Colors.white24,
+                  width: 2,
+                ),
+              ),
+              child: Center(
+                child: isDone
+                    ? Icon(Icons.check, color: Colors.white, size: h * 0.025)
+                    : Text(
+                        "$stepIndex",
+                        style: TextStyle(
+                          color: isActive ? Colors.white : Colors.white38,
+                          fontSize: h * 0.022,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
+            ),
+            SizedBox(height: h * 0.008),
+            Text(
+              steps[i ~/ 2],
+              style: TextStyle(
+                color: isActive ? Colors.blue : Colors.white38,
+                fontSize: h * 0.014,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 
-  // ========== CHAPTER SELECTION (Style Dashboard) ==========
   Widget _buildChapterSelection(double h, double w) {
+    final chapters = _currentChapters;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -417,9 +399,9 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
               mainAxisSpacing: 25,
               childAspectRatio: 3.5,
             ),
-            itemCount: _chapters.length,
+            itemCount: chapters.length,
             itemBuilder: (context, index) {
-              final chapter = _chapters[index];
+              final chapter = chapters[index];
               final isSelected = _selectedChapters.contains(chapter["id"]);
 
               return GestureDetector(
@@ -450,7 +432,7 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? const Color.fromARGB(255,33, 150, 243).withValues(alpha: 0.3)
+                            ? const Color.fromARGB(255, 33, 150, 243).withValues(alpha: 0.3)
                             : Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -492,7 +474,6 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
                             ),
                           ),
                           SizedBox(width: h * 0.010),
-                          // Image avec checkbox
                           Stack(
                             alignment: Alignment.topRight,
                             children: [
@@ -509,7 +490,6 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
                                   ),
                                 ),
                               ),
-                              // Checkbox en haut à droite de l'image
                               Container(
                                 width: h * 0.025,
                                 height: h * 0.025,
@@ -543,27 +523,8 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
       ],
     );
   }
-// Ajoutez les icons depuis dashboard
-String _getChapterIcon(String chapterId) {
-  switch (chapterId) {
-    case "Chapitre 01":
-      return "assets/images/icons_algo1/basics_icone.png";
-    case "Chapitre 02":
-      return "assets/images/icons_algo1/si_sinon_icon.png";
-    case "Chapitre 03":
-      return "assets/images/icons_algo1/loops_icone.png";
-    case "Chapitre 04":
-      return "assets/images/icons_algo1/vectors_matris_icon.png";
-    case "Chapitre 05":
-      return "assets/images/icons_algo1/fonction_procedure_icone.png";
-    default:
-      return "assets/images/icons_algo1/basics_icone.png";
-  }
-}
-  // ========== INTENSITY SELECTION ==========
-  Widget _buildIntensitySelection(double h, double w) {
-    final intensities = [10, 15, 20, 30];
 
+  Widget _buildIntensitySelection(double h, double w) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -578,8 +539,10 @@ String _getChapterIcon(String chapterId) {
         SizedBox(height: h * 0.02),
         Wrap(
           spacing: 16,
-          children: intensities.map((intensity) {
+          children: List.generate(_currentIntensities.length, (index) {
+            final intensity = _currentIntensities[index];
             final isSelected = _selectedIntensity == intensity;
+            final color = _currentIntensityColors[index];
             return GestureDetector(
               onTap: () => setState(() => _selectedIntensity = intensity),
               child: Container(
@@ -588,25 +551,35 @@ String _getChapterIcon(String chapterId) {
                   vertical: h * 0.015,
                 ),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? Colors.blue
-                      : Colors.white.withValues(alpha: 0.08),
+                  color: isSelected ? color.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: isSelected ? Colors.blue : Colors.white24,
+                    color: isSelected ? color : Colors.white24,
+                    width: isSelected ? 2 : 1,
                   ),
                 ),
-                child: Text(
-                  "$intensity ●",
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.white70,
-                    fontSize: h * 0.020,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      _currentIntensityLabels[index],
+                      style: TextStyle(
+                        color: isSelected ? color : Colors.white70,
+                        fontSize: h * 0.020,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                    Text(
+                      "$intensity questions/chapter",
+                      style: TextStyle(
+                        color: isSelected ? color.withValues(alpha: 0.8) : Colors.white54,
+                        fontSize: h * 0.012,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
-          }).toList(),
+          }),
         ),
         SizedBox(height: h * 0.03),
         Container(
@@ -629,11 +602,17 @@ String _getChapterIcon(String chapterId) {
               ),
               SizedBox(height: h * 0.01),
               Text(
-                "The difficulty level determines how many questions you'll answer from each selected chapter:\n\n"
-                "• 10 ● : Basic questions - Good for learning\n"
-                "• 15 ● : Intermediate - Mix of difficulty\n"
-                "• 20 ● : Advanced - Challenging questions\n"
-                "• 30 ● : Expert - Maximum difficulty",
+                _selectedAlgo == 1
+                    ? "The difficulty level determines how many questions you'll answer from each selected chapter:\n\n"
+                      "• 10 ● : Medium - Good for learning\n"
+                      "• 15 ● : Hard - Challenging questions\n"
+                      "• 20 ● : Expert - Advanced difficulty\n"
+                      "• 30 ● : Master - Maximum difficulty"
+                    : "The difficulty level determines how many questions you'll answer from each selected chapter:\n\n"
+                      "• 5 ● : Easy - Basic questions to get started\n"
+                      "• 10 ● : Medium - Mix of basic and intermediate questions\n"
+                      "• 15 ● : Hard - Challenging questions for advanced learners\n"
+                      "• 20 ● : Expert - Maximum difficulty for experts",
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: h * 0.014,
@@ -647,7 +626,6 @@ String _getChapterIcon(String chapterId) {
     );
   }
 
-  // ========== REVIEW SECTION ==========
   Widget _buildReviewSection(double h, double w) {
     final totalQuestions = _selectedChapters.length * _selectedIntensity;
 
@@ -670,7 +648,7 @@ String _getChapterIcon(String chapterId) {
                     Icon(Icons.check_circle, color: Colors.green, size: h * 0.03),
                     SizedBox(width: 12),
                     Text(
-                      "Quiz Configuration",
+                      "Quiz Configuration — ${_selectedAlgo == 1 ? "Algo 1" : "Algo 2"}",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: h * 0.022,
@@ -680,52 +658,31 @@ String _getChapterIcon(String chapterId) {
                   ],
                 ),
                 SizedBox(height: h * 0.02),
-                _buildReviewRow(
-                  h,
-                  "Selected Chapters",
-                  "${_selectedChapters.length}",
-                ),
+                _buildReviewRow(h, "Selected Chapters", "${_selectedChapters.length}"),
                 SizedBox(height: h * 0.01),
                 ..._selectedChapters.map((chapterId) {
-                  final chapter = _chapters.firstWhere(
+                  final chapter = _currentChapters.firstWhere(
                     (c) => c["id"] == chapterId,
-                    orElse: () => {"title": "Unknown", "icon": "❓"},
+                    orElse: () => {"title": "Unknown"},
                   );
                   return Padding(
                     padding: EdgeInsets.only(left: w * 0.03, bottom: h * 0.008),
                     child: Row(
                       children: [
-                        Text(
-                          "•",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: h * 0.020,
-                          ),
-                        ),
+                        Text("•", style: TextStyle(color: Colors.blue, fontSize: h * 0.020)),
                         SizedBox(width: 8),
                         Text(
                           chapter["title"]!,
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: h * 0.016,
-                          ),
+                          style: TextStyle(color: Colors.white70, fontSize: h * 0.016),
                         ),
                       ],
                     ),
                   );
                 }).toList(),
                 SizedBox(height: h * 0.02),
-                _buildReviewRow(
-                  h,
-                  "Difficulty Level",
-                  "$_selectedIntensity ●",
-                ),
+                _buildReviewRow(h, "Difficulty Level", "$_selectedIntensity questions/chapter"),
                 SizedBox(height: h * 0.02),
-                _buildReviewRow(
-                  h,
-                  "Total Questions",
-                  "$totalQuestions",
-                ),
+                _buildReviewRow(h, "Total Questions", "$totalQuestions"),
                 SizedBox(height: h * 0.02),
                 Container(
                   padding: EdgeInsets.all(h * 0.015),
@@ -741,10 +698,7 @@ String _getChapterIcon(String chapterId) {
                       Expanded(
                         child: Text(
                           "You're ready to start! Click 'Start Quiz' to begin.",
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: h * 0.014,
-                          ),
+                          style: TextStyle(color: Colors.green, fontSize: h * 0.014),
                         ),
                       ),
                     ],
@@ -762,41 +716,23 @@ String _getChapterIcon(String chapterId) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white54,
-            fontSize: h * 0.016,
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: h * 0.016,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text(label, style: TextStyle(color: Colors.white54, fontSize: h * 0.016)),
+        Text(value, style: TextStyle(color: Colors.blue, fontSize: h * 0.016, fontWeight: FontWeight.bold)),
       ],
     );
   }
 
-  // ========== NAVIGATION BUTTONS ==========
   Widget _buildNavigationButtons(double h, double w) {
     return Padding(
       padding: EdgeInsets.only(top: h * 0.02),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Bouton Retour
           if (_currentStep > 1)
             GestureDetector(
               onTap: () => setState(() => _currentStep--),
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: w * 0.02,
-                  vertical: h * 0.015,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: w * 0.02, vertical: h * 0.015),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
@@ -805,13 +741,7 @@ String _getChapterIcon(String chapterId) {
                 child: Row(
                   children: [
                     Icon(Icons.chevron_left, color: Colors.white, size: h * 0.02),
-                    Text(
-                      "Back",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: h * 0.018,
-                      ),
-                    ),
+                    Text("Back", style: TextStyle(color: Colors.white, fontSize: h * 0.018)),
                   ],
                 ),
               ),
@@ -819,7 +749,6 @@ String _getChapterIcon(String chapterId) {
           else
             const SizedBox(width: 80),
 
-          // Bouton Suivant / Démarrer
           if (_currentStep < 3)
             GestureDetector(
               onTap: () {
@@ -836,24 +765,11 @@ String _getChapterIcon(String chapterId) {
                 setState(() => _currentStep++);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: w * 0.03,
-                  vertical: h * 0.015,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: w * 0.03, vertical: h * 0.015),
+                decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(10)),
                 child: Row(
                   children: [
-                    Text(
-                      "Next",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: h * 0.018,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text("Next", style: TextStyle(color: Colors.white, fontSize: h * 0.018, fontWeight: FontWeight.bold)),
                     SizedBox(width: 8),
                     Icon(Icons.chevron_right, color: Colors.white, size: h * 0.02),
                   ],
@@ -863,41 +779,32 @@ String _getChapterIcon(String chapterId) {
           else
             GestureDetector(
               onTap: () {
-                final controller = QuizController(
-                  selectedChapters: _selectedChapters,
-                  intensity: _selectedIntensity,
-                );
-                
+                final controller = _selectedAlgo == 1
+                    ? QuizController(
+                        selectedChapters: _selectedChapters,
+                        intensity: _selectedIntensity,
+                      )
+                    : Algo2QuizController(
+                        selectedChapters: _selectedChapters,
+                        intensity: _selectedIntensity,
+                      );
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => QuizPageContent(
-                      controller: controller,
-                    ),
+                    builder: (_) => QuizPageContent(controller: controller),
                   ),
                 );
               },
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: w * 0.04,
-                  vertical: h * 0.015,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: h * 0.015),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.green, Colors.green.shade700],
-                  ),
+                  gradient: LinearGradient(colors: [Colors.green, Colors.green.shade700]),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      "Start Quiz",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: h * 0.018,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text("Start Quiz", style: TextStyle(color: Colors.white, fontSize: h * 0.018, fontWeight: FontWeight.bold)),
                     SizedBox(width: 8),
                     Icon(Icons.play_arrow, color: Colors.white, size: h * 0.022),
                   ],
@@ -909,8 +816,10 @@ String _getChapterIcon(String chapterId) {
     );
   }
 
-  // ========== RIGHT PANEL ==========
   Widget _buildRightPanel(double h, double w) {
+    final totalQuestions = _selectedChapters.length * _selectedIntensity;
+    final totalChapters = _currentChapters.length;
+
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -918,12 +827,10 @@ String _getChapterIcon(String chapterId) {
           width: w * 0.22,
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.06),
-            border: Border(
-              left: BorderSide(color: Colors.blue.withValues(alpha: 0.2)),
-            ),
+            border: Border(left: BorderSide(color: Colors.blue.withValues(alpha: 0.2))),
           ),
           padding: EdgeInsets.all(h * 0.025),
-          child: Column(
+           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -931,7 +838,7 @@ String _getChapterIcon(String chapterId) {
                   Icon(Icons.info_outline, color: Colors.blue, size: h * 0.022),
                   SizedBox(width: 8),
                   Text(
-                    "Quiz Info",
+                    "Quiz Info — ${_selectedAlgo == 1 ? "Algo 1" : "Algo 2"}",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: h * 0.020,
@@ -945,7 +852,7 @@ String _getChapterIcon(String chapterId) {
                 h,
                 icon: Icons.school,
                 label: "Total Chapters",
-                value: "${_chapters.length}",
+                value: "$totalChapters",
                 color: Colors.blue,
               ),
               SizedBox(height: h * 0.015),
@@ -961,7 +868,7 @@ String _getChapterIcon(String chapterId) {
                 h,
                 icon: Icons.assignment,
                 label: "Questions",
-                value: "${_selectedChapters.length * _selectedIntensity}",
+                value: "$totalQuestions",
                 color: Colors.purple,
               ),
               SizedBox(height: h * 0.02),
@@ -980,10 +887,16 @@ String _getChapterIcon(String chapterId) {
               ),
               SizedBox(height: h * 0.01),
               Text(
-                "• Mix different chapters\n"
-                "• Higher difficulty = more challenging\n"
-                "• Review before starting\n"
-                "• Take your time answering",
+                _selectedAlgo == 1
+                    ? "• Mix different chapters\n"
+                      "• Higher difficulty = more challenging\n"
+                      "• Review before starting\n"
+                      "• Take your time answering"
+                    : "• Algo 2 covers advanced data structures\n"
+                      "• Mix different chapters for better learning\n"
+                      "• Higher difficulty = more challenging\n"
+                      "• Review before starting\n"
+                      "• Take your time answering",
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: h * 0.013,

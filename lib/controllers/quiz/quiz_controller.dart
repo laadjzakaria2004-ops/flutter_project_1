@@ -1,15 +1,14 @@
 // controllers/quiz/quiz_controller.dart
 
 import '../../models/quiz/quiz_model.dart';
+import 'base_quiz_controller.dart';
 
-class QuizController {
+class QuizController implements BaseQuizController {
   late CustomQuizSession _session;
 
+  @override
   CustomQuizSession get session => _session;
 
-  /// Table des questions en base de données (à remplacer par SQL)
-  /// CHANGEMENT POUR SQL: Remplacer par un appel à la base de données
-  /// final List<Question> _allQuestions = await _databaseService.getAllQuestions();
   static const List<Map<String, dynamic>> _questionsDatabase = [
     // ========== CHAPITRE 01: BASICS ==========
     {
@@ -325,25 +324,19 @@ class QuizController {
     _initializeSession(selectedChapters, intensity);
   }
 
-  /// Initialise la session de quiz
   void _initializeSession(List<String> selectedChapters, int intensity) {
     List<Quiz> quizzes = [];
 
     for (var chapter in selectedChapters) {
-      // Récupérer les questions du chapitre
       final chapterQuestions = _getQuestionsByChapter(chapter);
-      
-      // Prendre les questions selon l'intensité
       final selectedQuestions = chapterQuestions.take(intensity).toList();
 
-      // Créer une quiz pour ce chapitre
       final quiz = Quiz(
         id: 'quiz_${chapter.replaceAll(' ', '_')}',
         title: chapter,
         chapter: chapter,
-        icon:"assets/images/icons_algo1/basics_icone.png" ,
+        icon: "assets/images/icons_algo1/basics_icone.png",
         questions: selectedQuestions,
-
       );
 
       quizzes.add(quiz);
@@ -357,9 +350,6 @@ class QuizController {
     );
   }
 
-  /// Récupère les questions d'un chapitre depuis la base de données
-  /// CHANGEMENT POUR SQL:
-  /// Remplacer par: final questions = await _databaseService.getQuestionsByChapter(chapter);
   List<Question> _getQuestionsByChapter(String chapter) {
     return _questionsDatabase
         .where((q) => q['chapter'] == chapter)
@@ -367,8 +357,6 @@ class QuizController {
         .toList();
   }
 
-  /// Convertit une entrée de la base de données en objet Question
-  /// CHANGEMENT POUR SQL: Cette méthode restera la même
   Question _mapToQuestion(Map<String, dynamic> data) {
     return Question(
       id: data['id'],
@@ -383,74 +371,106 @@ class QuizController {
     );
   }
 
-  // ========== NAVIGATION ==========
-  
-  /// Passe à la question suivante
+  @override
   void nextQuestion() {
     if (!_session.currentQuiz.isLastQuestion) {
       _session.currentQuiz.currentQuestionIndex++;
     }
   }
 
-  /// Retourne à la question précédente
+  @override
   void prevQuestion() {
     if (!_session.currentQuiz.isFirstQuestion) {
       _session.currentQuiz.currentQuestionIndex--;
     }
   }
 
-  /// Passe à la quiz suivante
+  @override
   bool nextQuiz() {
     return _session.nextQuiz();
   }
 
-  // ========== GETTERS ==========
-
+  @override
   bool get isFirstQuestion => _session.currentQuiz.isFirstQuestion;
+
+  @override
   bool get isLastQuestion => _session.currentQuiz.isLastQuestion;
+
+  @override
   bool get isLastQuiz => _session.isLastQuiz;
-  
+
+  @override
   int get totalQuestionsInCurrentQuiz => _session.currentQuiz.totalQuestions;
+
+  @override
   int get currentQuestionIndex => _session.currentQuiz.currentQuestionIndex;
+
+  @override
   Question get currentQuestion => _session.currentQuiz.currentQuestion;
-  
+
+  @override
   Quiz get currentQuiz => _session.currentQuiz;
 
-  // ========== RÉPONSES ==========
-
-  /// Enregistre une réponse pour une question multiple choice
+  @override
   void answerMultipleChoice(String questionId, String answer) {
+    if (_session.currentQuiz.isQuestionValidated(questionId)) {
+      return;
+    }
     _session.currentQuiz.userAnswers[questionId] = answer;
   }
 
-  /// Enregistre l'ordre pour une question ordering
+  @override
   void setOrdering(String questionId, List<String> order) {
+    if (_session.currentQuiz.isQuestionValidated(questionId)) {
+      return;
+    }
     _session.currentQuiz.userOrderings[questionId] = order;
   }
 
-  // ========== VÉRIFICATION ==========
-
-  /// Vérifie la réponse et retourne true si correcte
+  @override
   bool checkAnswer(String questionId) {
+    if (_session.currentQuiz.isQuestionValidated(questionId)) {
+      return getQuestionStatus(questionId) ?? false;
+    }
+
     final question = _session.currentQuiz.questions
         .firstWhere((q) => q.id == questionId);
 
+    bool isCorrect;
+
     if (question.type == QuestionType.multipleChoice) {
-      return _session.currentQuiz.userAnswers[questionId] == 
-             question.bonneReponse;
+      isCorrect = _session.currentQuiz.userAnswers[questionId] ==
+          question.bonneReponse;
     } else {
       final userOrder = _session.currentQuiz.userOrderings[questionId];
       if (userOrder == null) return false;
-      
       final correctOrder = question.bonneReponse.split('|');
-      return userOrder.join('|') == correctOrder.join('|');
+      isCorrect = userOrder.join('|') == correctOrder.join('|');
     }
+
+    if (isCorrect) {
+      _session.currentQuiz.validateQuestion(questionId);
+    }
+
+    return isCorrect;
   }
 
-  /// Obtient le statut d'une question (correct, incorrect, non répondue)
+  @override
   bool? getQuestionStatus(String questionId) {
     final question = _session.currentQuiz.questions
         .firstWhere((q) => q.id == questionId);
+
+    if (_session.currentQuiz.isQuestionValidated(questionId)) {
+      if (question.type == QuestionType.multipleChoice) {
+        return _session.currentQuiz.userAnswers[questionId] ==
+            question.bonneReponse;
+      } else {
+        final userOrder = _session.currentQuiz.userOrderings[questionId];
+        if (userOrder == null) return false;
+        final correctOrder = question.bonneReponse.split('|');
+        return userOrder.join('|') == correctOrder.join('|');
+      }
+    }
 
     if (question.type == QuestionType.multipleChoice) {
       if (!_session.currentQuiz.userAnswers.containsKey(questionId)) {
@@ -461,13 +481,11 @@ class QuizController {
         return null;
       }
     }
-    
+
     return checkAnswer(questionId);
   }
 
-  // ========== SCORES ==========
-
-  /// Obtient le score de la quiz actuelle
+  @override
   int getCurrentQuizScore() {
     int score = 0;
     for (var question in _session.currentQuiz.questions) {
@@ -478,17 +496,17 @@ class QuizController {
     return score;
   }
 
-  /// Obtient le score total de toute la session
+  @override
   int getTotalScore() {
     return _session.getTotalScore();
   }
 
-  /// Obtient le pourcentage de réussite
+  @override
   int getPercentage() {
     return _session.getPercentage();
   }
 
-  /// Réinitialise la session
+  @override
   void resetSession() {
     for (var quiz in _session.quizzes) {
       quiz.reset();

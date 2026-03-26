@@ -9,10 +9,9 @@ class Question {
   final String reponseB;
   final String reponseC;
   final String reponseD;
-  final String bonneReponse; // "A", "B", "C", "D" pour multipleChoice
-  // "Initialization|Condition|Body|Increment" pour ordering
+  final String bonneReponse;
   final QuestionType type;
-  final List<String>? codeLines; // pour type ordering uniquement
+  final List<String>? codeLines;
 
   Question({
     required this.id,
@@ -26,7 +25,6 @@ class Question {
     this.codeLines,
   });
 
-  /// Copie la question avec certains paramètres modifiés
   Question copyWith({
     String? id,
     String? enonce,
@@ -55,12 +53,13 @@ class Question {
 class Quiz {
   final String id;
   final String title;
-  final String chapter; // Chapitre d'origine
+  final String chapter;
   final String icon;
   final List<Question> questions;
   int currentQuestionIndex;
-  Map<String, String> userAnswers; // questionId → réponse choisie (A, B, C, D)
-  Map<String, List<String>> userOrderings; // questionId → ordre choisi
+  Map<String, String> userAnswers;
+  Map<String, List<String>> userOrderings;
+  Map<String, bool> validatedQuestions;
 
   Quiz({
     required this.id,
@@ -71,35 +70,46 @@ class Quiz {
     this.currentQuestionIndex = 0,
     Map<String, String>? userAnswers,
     Map<String, List<String>>? userOrderings,
+    Map<String, bool>? validatedQuestions,
   }) : userAnswers = userAnswers ?? {},
-       userOrderings = userOrderings ?? {};
+       userOrderings = userOrderings ?? {},
+       validatedQuestions = validatedQuestions ?? {};
 
-  /// Réinitialise le quiz
   void reset() {
     currentQuestionIndex = 0;
     userAnswers.clear();
     userOrderings.clear();
+    validatedQuestions.clear();
   }
 
-  /// Récupère la question actuelle
+  bool isQuestionValidated(String questionId) {
+    return validatedQuestions[questionId] ?? false;
+  }
+
+  void validateQuestion(String questionId) {
+    validatedQuestions[questionId] = true;
+  }
+
+  bool hasAnswer(String questionId) {
+    final question = questions.firstWhere((q) => q.id == questionId);
+    if (question.type == QuestionType.multipleChoice) {
+      return userAnswers.containsKey(questionId);
+    } else {
+      return userOrderings.containsKey(questionId);
+    }
+  }
+
   Question get currentQuestion => questions[currentQuestionIndex];
-
-  /// Vérifie si c'est la première question
   bool get isFirstQuestion => currentQuestionIndex == 0;
-
-  /// Vérifie si c'est la dernière question
   bool get isLastQuestion => currentQuestionIndex == questions.length - 1;
-
-  /// Nombre total de questions
   int get totalQuestions => questions.length;
 }
 
-/// Classe pour gérer une session de quiz personnalisée
 class CustomQuizSession {
   final String id;
   final List<String> selectedChapters;
   final int intensity;
-  final List<Quiz> quizzes; // Une quiz par chapitre sélectionné
+  final List<Quiz> quizzes;
   int currentQuizIndex;
 
   CustomQuizSession({
@@ -110,10 +120,8 @@ class CustomQuizSession {
     this.currentQuizIndex = 0,
   });
 
-  /// Quiz actuelle
   Quiz get currentQuiz => quizzes[currentQuizIndex];
 
-  /// Passe à la prochaine quiz
   bool nextQuiz() {
     if (currentQuizIndex < quizzes.length - 1) {
       currentQuizIndex++;
@@ -122,10 +130,8 @@ class CustomQuizSession {
     return false;
   }
 
-  /// Vérifie si c'est la dernière quiz
   bool get isLastQuiz => currentQuizIndex == quizzes.length - 1;
 
-  /// Calcule le score total
   int getTotalScore() {
     int totalScore = 0;
     for (var quiz in quizzes) {
@@ -134,24 +140,24 @@ class CustomQuizSession {
     return totalScore;
   }
 
-  /// Score total possible
   int get totalPossibleScore =>
       quizzes.fold(0, (sum, quiz) => sum + quiz.totalQuestions);
 
-  /// Calcule le score pour une quiz
   int _calculateQuizScore(Quiz quiz) {
     int score = 0;
     for (var question in quiz.questions) {
-      if (question.type == QuestionType.multipleChoice) {
-        if (quiz.userAnswers[question.id] == question.bonneReponse) {
-          score++;
-        }
-      } else {
-        final userOrder = quiz.userOrderings[question.id];
-        if (userOrder != null) {
-          final correctOrder = question.bonneReponse.split('|');
-          if (userOrder.join('|') == correctOrder.join('|')) {
+      if (quiz.isQuestionValidated(question.id)) {
+        if (question.type == QuestionType.multipleChoice) {
+          if (quiz.userAnswers[question.id] == question.bonneReponse) {
             score++;
+          }
+        } else {
+          final userOrder = quiz.userOrderings[question.id];
+          if (userOrder != null) {
+            final correctOrder = question.bonneReponse.split('|');
+            if (userOrder.join('|') == correctOrder.join('|')) {
+              score++;
+            }
           }
         }
       }
@@ -159,7 +165,6 @@ class CustomQuizSession {
     return score;
   }
 
-  /// Calcule le pourcentage de réussite
   int getPercentage() {
     if (totalPossibleScore == 0) return 0;
     return ((getTotalScore() / totalPossibleScore) * 100).toInt();
