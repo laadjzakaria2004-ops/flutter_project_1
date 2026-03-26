@@ -5,9 +5,7 @@ import '../leaderboard/leaderboard_page.dart';
 import 'dart:ui';
 import '../../controllers/dashboard/dashboard_controller.dart';
 import '../courses_study_page/courses_study_page.dart';
-import '../../models/courses_study/courses_study_model.dart';
-import '../../controllers/courses_study/courses_study_controller.dart';
-import '../../service/serviceXML.dart';
+
 import '../auth/login_page.dart';
 import 'algo2_grid.dart';
 import '../../controllers/dashboard/algo2_controller.dart';

@@ -1,17 +1,17 @@
-// views/quiz/quiz_page_content.dart
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../../controllers/quiz/quiz_controller.dart';
+
 import '../../models/quiz/quiz_model.dart';
 import '../dashboard/dashboard_page.dart';
-import '../../views/auth/login_page.dart';
+
 import '../files/files_page.dart';
 import '../leaderboard/leaderboard_page.dart';
 import 'quiz_selection_page.dart';
-import '../../controllers/quiz/quiz_controller.dart';
+
 import '../../controllers/quiz/base_quiz_controller.dart';
-import '../../controllers/quiz/algo2_quiz_controller.dart';
+
 
 class QuizPageContent extends StatefulWidget {
   final BaseQuizController controller;
